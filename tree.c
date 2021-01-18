@@ -32,6 +32,16 @@ node * newNode(char ch,node * p)
     n->counterPath=0;
     return n;
 }
+//function that gets pointer to the root of the tree and delete the tree
+void deleteTree(node * root)
+{
+    if(root==NULL)
+        return;
+    //delete all of his children
+    for(int i=0;i<NUM_LETTERS;i++)
+        deleteTree(root->children[i]);
+    free(root);
+}
 //function that gets char and transform it to lower case char if it not letter return !
 char lowerCaseLetter(char ch)
 {
@@ -82,6 +92,7 @@ node* fill_tree()
             if(new_node==NULL)
             {
                 printf("malloc for new node failed\n");
+                deleteTree(root);
                 return NULL;
             }
             current->children[ch-'a'] =new_node;//connect it to the Trie
@@ -100,16 +111,7 @@ node* fill_tree()
         current->count+=1;
     return root;
 }
-//function that gets pointer to the root of the tree and delete the tree
-void deleteTree(node * root)
-{
-    if(root==NULL)
-        return;
-    //delete all of his children
-    for(int i=0;i<NUM_LETTERS;i++)
-        deleteTree(root->children[i]);
-    free(root);
-}
+
 //function that gets pointer to node and the number of words that end with this node
 //and subtract this num from the counterPath of each node in the route of this word
 void removeCounter(node * node_ptr,int num)
